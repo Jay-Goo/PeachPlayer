@@ -28,9 +28,11 @@ public class MainActivity extends AppCompatActivity {
         TableLayout mHudView = (TableLayout) findViewById(R.id.hud_view);
 
         mVideoView.setMediaController(mMediaController);
-        mVideoView.setVideoPath(Environment.getExternalStorageDirectory().getPath()+"/Movies/Screenrecords/demo.mp4");
+        mVideoView.setVideoPath(Environment.getExternalStorageDirectory().getPath()+"/DCIM/Video/demo2.mp4");
+
+//        mVideoView.setVideoPath(Environment.getExternalStorageDirectory().getPath()+"/Movies/Screenrecords/demo.mp4");
 //        mVideoView.setVideoURI(Uri.parse("http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"));
-        mVideoView.setHudView(mHudView);
+//        mVideoView.setHudView(mHudView);
 
         findViewById(R.id.playBtn).setOnClickListener(new View.OnClickListener() {
             @Override

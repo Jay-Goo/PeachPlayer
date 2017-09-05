@@ -311,11 +311,14 @@ public class SuperMediaController extends FrameLayout {
                 mPlayer.setSpeed(1.0f);
                 mPlaySpeedTv.setText("X 1.0");
             } else if (mPlaySpeedTv.getText().toString().contains("1.0")) {
-                mPlayer.setSpeed(8.5f);
+                mPlayer.setSpeed(1.25f);
+                mPlaySpeedTv.setText("X 1.25");
+            }else if (mPlaySpeedTv.getText().toString().contains("1.25")) {
+                mPlayer.setSpeed(1.5f);
                 mPlaySpeedTv.setText("X 1.5");
             } else {
-                mPlayer.setSpeed(0.75f);
-                mPlaySpeedTv.setText("X 0.75");
+                mPlayer.setSpeed(2f);
+                mPlaySpeedTv.setText("X 2.0");
             }
         }
     };
@@ -397,6 +400,13 @@ public class SuperMediaController extends FrameLayout {
         boolean canPause();
         boolean canSeekBackward();
         boolean canSeekForward();
+
+        /**
+         * speed value [0.75f ,2f]
+         * the source file need has audio, otherwise this method will not work
+         * https://github.com/Bilibili/ijkplayer/issues/3316
+         * @param speed
+         */
         void setSpeed(float speed);
     }
 }

@@ -283,9 +283,7 @@ public class IjkVideoView extends FrameLayout implements SuperMediaController.Me
     @Override
     public void setSpeed(float speed) {
         if (mMediaPlayer != null && ijkMediaPlayer != null && mMediaPlayer.isPlaying()){
-            ijkMediaPlayer.setSpeed(1.5f);
-            Log.i("fuck", "setSpeed: "+speed+"|"+ijkMediaPlayer.getSpeed(9));
-
+            ijkMediaPlayer.setSpeed(speed);
         }
     }
 
@@ -416,7 +414,9 @@ public class IjkVideoView extends FrameLayout implements SuperMediaController.Me
     IMediaPlayer.OnPreparedListener mPreparedListener = new IMediaPlayer.OnPreparedListener() {
         public void onPrepared(IMediaPlayer mp) {
             mPrepareEndTime = System.currentTimeMillis();
-            mHudViewHolder.updateLoadCost(mPrepareEndTime - mPrepareStartTime);
+            if (mHudViewHolder != null) {
+                mHudViewHolder.updateLoadCost(mPrepareEndTime - mPrepareStartTime);
+            }
             mCurrentState = STATE_PREPARED;
 
             // Get the capabilities of the player for this stream
@@ -598,7 +598,9 @@ public class IjkVideoView extends FrameLayout implements SuperMediaController.Me
         @Override
         public void onSeekComplete(IMediaPlayer mp) {
             mSeekEndTime = System.currentTimeMillis();
-            mHudViewHolder.updateSeekCost(mSeekEndTime - mSeekStartTime);
+            if (mHudViewHolder != null) {
+                mHudViewHolder.updateSeekCost(mSeekEndTime - mSeekStartTime);
+            }
         }
     };
 
@@ -1065,12 +1067,12 @@ public class IjkVideoView extends FrameLayout implements SuperMediaController.Me
 
             ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
         }
+
         mediaPlayer = ijkMediaPlayer;
 
-        mediaPlayer = new TextureMediaPlayer(mediaPlayer);
-//        if (mSettings.getEnableDetachedSurfaceTextureView()) {
-//            mediaPlayer = new TextureMediaPlayer(mediaPlayer);
-//        }
+        if (mSettings.getEnableDetachedSurfaceTextureView()) {
+            mediaPlayer = new TextureMediaPlayer(mediaPlayer);
+        }
 
         return mediaPlayer;
     }
