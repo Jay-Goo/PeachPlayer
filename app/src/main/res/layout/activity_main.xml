@@ -24,10 +24,11 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               />
-          <jaygoo.superijkplayer.media.AndroidMediaController
+          <jaygoo.ijkplayerdemo.CustomMediaPlayerController
               android:id="@+id/mediaController"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              app:controllerLayoutId="@layout/custom_media_controller"
               android:layout_gravity="bottom"/>
           <TableLayout
               android:id="@+id/hud_view"

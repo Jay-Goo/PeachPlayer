@@ -7,40 +7,25 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/pause_iv"
+        android:id="@+id/controller_iv_pause"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:padding="6dp"
+        android:clickable="true"
         android:layout_gravity="center_vertical"
         android:src="@drawable/video_pause" />
 
     <TextView
-        android:id="@+id/time_current"
+        android:id="@+id/controller_tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
         android:textColor="@android:color/white"
         android:textSize="14sp"
-        android:text="00:00"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:text=" / "
-        android:textColor="@android:color/white"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:text="00:00"
-        android:textSize="14sp" />
+        android:text="00:00 / 00:00"/>
 
     <SeekBar
-        android:id="@+id/mediacontroller_progress"
+        android:id="@+id/controller_seekBar_progress"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -52,7 +37,7 @@
         android:thumb="@drawable/video_seekbar_thumb" />
 
     <TextView
-        android:id="@+id/play_speed_tv"
+        android:id="@+id/controller_tv_speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"

@@ -10,6 +10,7 @@ import android.widget.TableLayout;
 
 import jaygoo.superijkplayer.media.AndroidMediaController;
 import jaygoo.superijkplayer.media.IjkVideoView;
+import jaygoo.superijkplayer.media.SuperMediaController;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        AndroidMediaController mMediaController = (AndroidMediaController) findViewById(R.id.mediaController);
+        CustomMediaPlayerController mMediaController = (CustomMediaPlayerController) findViewById(R.id.mediaController);
 
         // init player
         IjkMediaPlayer.loadLibrariesOnce(null);
