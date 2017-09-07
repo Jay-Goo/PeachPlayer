@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="jaygoo.ijkplayerdemo.MainActivity">
+    tools:context="jaygoo.peachplayerdemo.MainActivity">
 
     <Button
         android:id="@+id/playBtn"
@@ -19,12 +19,12 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent">
 
-          <jaygoo.superijkplayer.media.IjkVideoView
+          <jaygoo.peachplayer.media.IjkVideoView
               android:id="@+id/ijkVideoView"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               />
-          <jaygoo.ijkplayerdemo.CustomMediaPlayerController
+          <jaygoo.peachplayerdemo.CustomMediaPlayerController
               android:id="@+id/mediaController"
               android:layout_width="match_parent"
               android:layout_height="match_parent"

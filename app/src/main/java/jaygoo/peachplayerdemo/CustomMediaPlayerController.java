@@ -1,9 +1,9 @@
-package jaygoo.ijkplayerdemo;
+package jaygoo.peachplayerdemo;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
-import jaygoo.superijkplayer.media.AndroidMediaController;
+import jaygoo.peachplayer.media.AndroidMediaController;
 
 /**
  * ================================================

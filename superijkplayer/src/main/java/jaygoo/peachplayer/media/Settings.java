@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package jaygoo.superijkplayer.media;
+package jaygoo.peachplayer.media;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import jaygoo.superijkplayer.R;
+import jaygoo.peachplayer.R;
 
 
 public class Settings {

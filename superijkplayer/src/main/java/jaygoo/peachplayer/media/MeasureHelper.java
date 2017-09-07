@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package jaygoo.superijkplayer.media;
+package jaygoo.peachplayer.media;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -23,7 +23,7 @@ import android.view.View;
 
 import java.lang.ref.WeakReference;
 
-import jaygoo.superijkplayer.R;
+import jaygoo.peachplayer.R;
 
 
 public final class MeasureHelper {

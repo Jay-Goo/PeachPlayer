@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package jaygoo.superijkplayer.media;
+package jaygoo.peachplayer.media;
 
 import android.graphics.SurfaceTexture;
 import android.support.annotation.NonNull;

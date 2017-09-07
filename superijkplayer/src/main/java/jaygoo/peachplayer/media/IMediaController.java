@@ -15,10 +15,9 @@
  * limitations under the License.
  */
 
-package jaygoo.superijkplayer.media;
+package jaygoo.peachplayer.media;
 
 import android.view.View;
-import android.widget.MediaController;
 
 public interface IMediaController {
     void hide();

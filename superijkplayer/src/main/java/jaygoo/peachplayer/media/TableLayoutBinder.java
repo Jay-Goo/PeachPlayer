@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package jaygoo.superijkplayer.media;
+package jaygoo.peachplayer.media;
 
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
@@ -25,7 +25,7 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-import jaygoo.superijkplayer.R;
+import jaygoo.peachplayer.R;
 
 
 public class TableLayoutBinder {

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package jaygoo.superijkplayer.media;
+package jaygoo.peachplayer.media;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -27,7 +27,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.text.LoginFilter;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -46,8 +45,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import jaygoo.superijkplayer.R;
-import jaygoo.superijkplayer.services.MediaPlayerService;
+import jaygoo.peachplayer.R;
+import jaygoo.peachplayer.services.MediaPlayerService;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkTimedText;

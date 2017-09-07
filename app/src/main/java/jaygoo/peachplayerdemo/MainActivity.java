@@ -1,16 +1,12 @@
-package jaygoo.ijkplayerdemo;
+package jaygoo.peachplayerdemo;
 
-import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TableLayout;
 
-import jaygoo.superijkplayer.media.AndroidMediaController;
-import jaygoo.superijkplayer.media.IjkVideoView;
-import jaygoo.superijkplayer.media.SuperMediaController;
+import jaygoo.peachplayer.media.IjkVideoView;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class MainActivity extends AppCompatActivity {

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package jaygoo.superijkplayer.services;
+package jaygoo.peachplayer.services;
 
 import android.app.Service;
 import android.content.Context;

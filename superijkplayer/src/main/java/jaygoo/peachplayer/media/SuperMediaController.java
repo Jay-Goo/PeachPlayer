@@ -1,4 +1,4 @@
-package jaygoo.superijkplayer.media;
+package jaygoo.peachplayer.media;
 
 /**
  * ================================================
@@ -30,7 +30,7 @@ import android.widget.TextView;
 import java.util.Formatter;
 import java.util.Locale;
 
-import jaygoo.superijkplayer.R;
+import jaygoo.peachplayer.R;
 
 
 public class SuperMediaController extends FrameLayout{

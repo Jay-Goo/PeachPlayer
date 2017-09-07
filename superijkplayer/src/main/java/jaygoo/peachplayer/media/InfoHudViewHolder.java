@@ -1,4 +1,4 @@
-package jaygoo.superijkplayer.media;
+package jaygoo.peachplayer.media;
 
 import android.content.Context;
 import android.os.Handler;
@@ -9,7 +9,7 @@ import android.widget.TableLayout;
 
 import java.util.Locale;
 
-import jaygoo.superijkplayer.R;
+import jaygoo.peachplayer.R;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 import tv.danmaku.ijk.media.player.MediaPlayerProxy;
