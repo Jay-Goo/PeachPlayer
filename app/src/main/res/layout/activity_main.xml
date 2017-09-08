@@ -1,45 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/video_screen_father"
     tools:context="jaygoo.peachplayerdemo.MainActivity">
 
-    <Button
-        android:id="@+id/playBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="播放"
-        />
-
       <FrameLayout
+          android:id="@+id/video_screen"
           android:layout_width="match_parent"
-          android:layout_height="match_parent">
+          android:background="@color/color_video_screen_background"
+          android:layout_height="200dp">
 
-          <jaygoo.peachplayer.media.IjkVideoView
+          <jaygoo.peachplayer.media.PeachVideoView
               android:id="@+id/ijkVideoView"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               />
-          <jaygoo.peachplayerdemo.CustomMediaPlayerController
+          <jaygoo.peachplayer.media.AndroidMediaController
               android:id="@+id/mediaController"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              app:controllerLayoutId="@layout/custom_media_controller"
               android:layout_gravity="bottom"/>
-          <TableLayout
-              android:id="@+id/hud_view"
-              android:visibility="visible"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="left|center_vertical"
-              android:background="@color/color_e7e7e7"
-              android:padding="8dp" />
+          <!--<TableLayout-->
+              <!--android:id="@+id/hud_view"-->
+              <!--android:visibility="visible"-->
+              <!--android:layout_width="wrap_content"-->
+              <!--android:layout_height="wrap_content"-->
+              <!--android:layout_gravity="left|center_vertical"-->
+              <!--android:background="@color/color_e7e7e7"-->
+              <!--android:padding="8dp" />-->
       </FrameLayout>
 
+    <!--<FrameLayout-->
+        <!--android:id="@+id/full_screen"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="#000"-->
+        <!--android:gravity="center"-->
+        <!--android:visibility="gone" />-->
 
-
-</LinearLayout>
+</FrameLayout>

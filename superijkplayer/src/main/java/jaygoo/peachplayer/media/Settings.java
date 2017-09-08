@@ -53,26 +53,48 @@ public class Settings {
         }
     }
 
+    /**
+     * 视频硬解码
+     * @return
+     */
     public boolean getUsingMediaCodec() {
         String key = mAppContext.getString(R.string.pref_key_using_media_codec);
         return mSharedPreferences.getBoolean(key, false);
     }
 
+    /**
+     * 使用MediaCodec信息自动旋转
+     * @return
+     */
     public boolean getUsingMediaCodecAutoRotate() {
         String key = mAppContext.getString(R.string.pref_key_using_media_codec_auto_rotate);
-        return mSharedPreferences.getBoolean(key, false);
+        return mSharedPreferences.getBoolean(key, true);
     }
 
+    /**
+     * 媒体编码器处理分辨率变化
+     * @return
+     */
     public boolean getMediaCodecHandleResolutionChange() {
         String key = mAppContext.getString(R.string.pref_key_media_codec_handle_resolution_change);
         return mSharedPreferences.getBoolean(key, false);
     }
 
+    /**
+     * 是否使用OpenSLES
+     * OpenSLES可以提高音频数据处理效率
+     * 但是不支持MIDI、不支持播放DRM和加密内容、不支持音频数据的编解码
+     * @return
+     */
     public boolean getUsingOpenSLES() {
         String key = mAppContext.getString(R.string.pref_key_using_opensl_es);
         return mSharedPreferences.getBoolean(key, false);
     }
 
+    /**
+     * 设置像素格式
+     * @return
+     */
     public String getPixelFormat() {
         String key = mAppContext.getString(R.string.pref_key_pixel_format);
         return mSharedPreferences.getString(key, "");
@@ -88,9 +110,13 @@ public class Settings {
         return mSharedPreferences.getBoolean(key, false);
     }
 
+    /**
+     * 旋转需要支持TextureView
+     * @return
+     */
     public boolean getEnableTextureView() {
         String key = mAppContext.getString(R.string.pref_key_enable_texture_view);
-        return mSharedPreferences.getBoolean(key, false);
+        return mSharedPreferences.getBoolean(key, true);
     }
 
     public boolean getEnableDetachedSurfaceTextureView() {
@@ -100,7 +126,7 @@ public class Settings {
 
     public boolean getUsingMediaDataSource() {
         String key = mAppContext.getString(R.string.pref_key_using_mediadatasource);
-        return mSharedPreferences.getBoolean(key, false);
+        return mSharedPreferences.getBoolean(key, true);
     }
 
     public String getLastDirectory() {

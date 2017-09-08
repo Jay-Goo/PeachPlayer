@@ -13,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="jaygoo.peachplayerdemo.MainActivity">
+        <activity android:name="jaygoo.peachplayerdemo.MainActivity"
+                  android:hardwareAccelerated="true"
+                  android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

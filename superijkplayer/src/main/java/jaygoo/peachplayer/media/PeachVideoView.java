@@ -55,9 +55,16 @@ import tv.danmaku.ijk.media.player.misc.IMediaDataSource;
 import tv.danmaku.ijk.media.player.misc.IMediaFormat;
 import tv.danmaku.ijk.media.player.misc.ITrackInfo;
 import tv.danmaku.ijk.media.player.misc.IjkMediaFormat;
-
-public class IjkVideoView extends FrameLayout implements SuperMediaController.MediaPlayerControl {
-    private String TAG = "IjkVideoView";
+/**
+ * ================================================
+ * 作    者：JayGoo
+ * 版    本：
+ * 创建日期：2017/9/7
+ * 描    述: 播放器
+ * ================================================
+ */
+public class PeachVideoView extends FrameLayout implements BaseMediaController.MediaPlayerControl {
+    private String TAG = "PeachVideoView";
     // settable by the client
     private Uri mUri;
     private Map<String, String> mHeaders;
@@ -124,23 +131,23 @@ public class IjkVideoView extends FrameLayout implements SuperMediaController.Me
 
     private TextView subtitleDisplay;
 
-    public IjkVideoView(Context context) {
+    public PeachVideoView(Context context) {
         super(context);
         initVideoView(context);
     }
 
-    public IjkVideoView(Context context, AttributeSet attrs) {
+    public PeachVideoView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initVideoView(context);
     }
 
-    public IjkVideoView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PeachVideoView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initVideoView(context);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public IjkVideoView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public PeachVideoView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initVideoView(context);
     }
@@ -523,7 +530,7 @@ public class IjkVideoView extends FrameLayout implements SuperMediaController.Me
                             mVideoRotationDegree = arg2;
                             Log.d(TAG, "MEDIA_INFO_VIDEO_ROTATION_CHANGED: " + arg2);
                             if (mRenderView != null)
-                                mRenderView.setVideoRotation(arg2);
+                                mRenderView.setVideoRotation(mVideoRotationDegree);
                             break;
                         case IMediaPlayer.MEDIA_INFO_AUDIO_RENDERING_START:
                             Log.d(TAG, "MEDIA_INFO_AUDIO_RENDERING_START:");

@@ -27,11 +27,29 @@ import android.view.View;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 public interface IRenderView {
-    int AR_ASPECT_FIT_PARENT = 0; // without clip
-    int AR_ASPECT_FILL_PARENT = 1; // may clip
+    /**
+     * 可能会剪裁,保持原视频的大小，显示在中心,当原视频的大小超过view的大小超过部分裁剪处理
+     */
+    int AR_ASPECT_FIT_PARENT = 0;
+    /**
+     * 可能会剪裁,等比例放大视频，直到填满View为止,超过View的部分作裁剪处理
+     */
+    int AR_ASPECT_FILL_PARENT = 1;
+    /**
+     * 将视频的内容完整居中显示，如果视频大于view,则按比例缩视频直到完全显示在view中
+     **/
     int AR_ASPECT_WRAP_CONTENT = 2;
+    /**
+     * 不剪裁,非等比例拉伸画面填满整个View
+     */
     int AR_MATCH_PARENT = 3;
+    /**
+     * 不剪裁,非等比例拉伸画面到16:9,并完全显示在View中
+     */
     int AR_16_9_FIT_PARENT = 4;
+    /**
+     * 不剪裁,非等比例拉伸画面到4:3,并完全显示在View中
+     */
     int AR_4_3_FIT_PARENT = 5;
 
     View getView();

@@ -1,42 +1,55 @@
 package jaygoo.peachplayerdemo;
 
-import android.os.Environment;
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.TableLayout;
+import android.widget.FrameLayout;
 
-import jaygoo.peachplayer.media.IjkVideoView;
+import jaygoo.peachplayer.media.AndroidMediaController;
+import jaygoo.peachplayer.media.PeachVideoView;
+import jaygoo.peachplayer.media.ScreenChangeController;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class MainActivity extends AppCompatActivity {
+
+    private FrameLayout fullScreen;
+    private AndroidMediaController mMediaController;
+    private PeachVideoView mVideoView;
+    private ScreenChangeController mScreenChangeController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        CustomMediaPlayerController mMediaController = (CustomMediaPlayerController) findViewById(R.id.mediaController);
+        mMediaController = (AndroidMediaController) findViewById(R.id.mediaController);
 
         // init player
         IjkMediaPlayer.loadLibrariesOnce(null);
         IjkMediaPlayer.native_profileBegin("libijkplayer.so");
 
-        final IjkVideoView mVideoView = (IjkVideoView) findViewById(R.id.ijkVideoView);
-        TableLayout mHudView = (TableLayout) findViewById(R.id.hud_view);
+        mVideoView = (PeachVideoView) findViewById(R.id.ijkVideoView);
 
         mVideoView.setMediaController(mMediaController);
-        mVideoView.setVideoPath(Environment.getExternalStorageDirectory().getPath()+"/DCIM/Video/demo2.mp4");
+//        mVideoView.setVideoPath(Environment.getExternalStorageDirectory().getPath()+"/DCIM/Video/demo1.mp4");
 
 //        mVideoView.setVideoPath(Environment.getExternalStorageDirectory().getPath()+"/Movies/Screenrecords/demo.mp4");
-//        mVideoView.setVideoURI(Uri.parse("http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"));
+        mVideoView.setVideoURI(Uri.parse("http://media6.smartstudy.com/f4/10/3993/2/dest.m3u8"));
 //        mVideoView.setHudView(mHudView);
+//        fullScreen = (FrameLayout) findViewById(R.id.full_screen);
+        mScreenChangeController = new ScreenChangeController((FrameLayout)findViewById(R.id.video_screen),null);
+    }
 
-        findViewById(R.id.playBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mVideoView.setSpeed(2f);
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
-            }
-        });
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (mScreenChangeController != null){
+            mScreenChangeController.onConfigurationChanged(newConfig);
+        }
     }
 }

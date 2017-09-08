@@ -8,7 +8,9 @@ package jaygoo.peachplayer.media;
  * 描    述:
  * ================================================
  */
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Message;
@@ -31,47 +33,50 @@ import java.util.Formatter;
 import java.util.Locale;
 
 import jaygoo.peachplayer.R;
+import jaygoo.peachplayer.utils.DeviceUtils;
 
 
-public class SuperMediaController extends FrameLayout{
+public class BaseMediaController extends FrameLayout{
+    String TAG = "fuck";
+    StringBuilder mFormatBuilder;
+    Formatter mFormatter;
+    View mPauseButton;
+    View mFullScreenButton;
+    TextView mPlaySpeedTv;
+    MediaPlayerControl mPlayer;
+    View mRoot;
+    SeekBar mProgress;
+    TextView mCurrentTime;
 
-    private MediaPlayerControl mPlayer;
-    private View mRoot;
-    private SeekBar mProgress;
-    private TextView mCurrentTime;
     private boolean mShowing;
     private boolean mDragging;
     private static final int sDefaultTimeout = 3000;
     private static final int FADE_OUT = 1;
     private static final int SHOW_PROGRESS = 2;
     private static final float MIN_MOVE_DISTANCE = 40;//最小滑动距离
-    StringBuilder mFormatBuilder;
-    Formatter mFormatter;
-    private View mPauseButton;
-    private TextView mPlaySpeedTv;
     private CharSequence mPlayDescription;
     private CharSequence mPauseDescription;
     private GestureDetector mGestureDetector;
     private boolean isGestureDetectorEnable = true;
     private int mMediaControllerLayoutId = R.layout.default_media_controller;
 
-    public SuperMediaController(Context context, AttributeSet attrs) {
+    public BaseMediaController(Context context, AttributeSet attrs) {
         super(context, attrs);
         initAttrs(attrs);
         makeControllerView();
     }
 
 
-    public SuperMediaController(Context context) {
+    public BaseMediaController(Context context) {
         super(context);
         makeControllerView();
     }
 
 
     private void initAttrs(AttributeSet attrs) {
-        TypedArray t = getContext().obtainStyledAttributes(attrs, R.styleable.SuperMediaController);
+        TypedArray t = getContext().obtainStyledAttributes(attrs, R.styleable.BaseMediaController);
         if (t != null){
-            mMediaControllerLayoutId = t.getResourceId(R.styleable.SuperMediaController_controllerLayoutId,
+            mMediaControllerLayoutId = t.getResourceId(R.styleable.BaseMediaController_controllerLayoutId,
                     R.layout.default_media_controller);
             t.recycle();
         }
@@ -93,6 +98,11 @@ public class SuperMediaController extends FrameLayout{
         if (mPauseButton != null) {
             mPauseButton.requestFocus();
             mPauseButton.setOnClickListener(mPauseListener);
+        }
+
+        mFullScreenButton = v.findViewById(R.id.controller_iv_fullScreen);
+        if (mFullScreenButton != null){
+            mFullScreenButton.requestFocus();
         }
 
         mProgress = (SeekBar) v.findViewById(R.id.controller_seekBar_progress);
@@ -214,56 +224,65 @@ public class SuperMediaController extends FrameLayout{
         return true;
     }
 
-    private GestureDetector.OnGestureListener onGestureListener =
-            new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                                       float velocityY) {
-                    float beginX = e1.getX();
-                    float endX = e2.getX();
-                    float beginY = e1.getY();
-                    float endY = e2.getY();
-                    float moveDistanceX = endX - beginX;
-                    float moveDistanceY = endY - beginY;
-
-                    if(-moveDistanceX > MIN_MOVE_DISTANCE && checkIsHorizontalDirection(moveDistanceX, moveDistanceY)){
-                        //左滑
-                        Log.i("fuck", "onFling: 左");
-                    }else if(moveDistanceX > MIN_MOVE_DISTANCE && checkIsHorizontalDirection(moveDistanceX, moveDistanceY)){
-                        //右滑
-                        Log.i("fuck", "onFling: 右");
-                    }else if(-moveDistanceY > MIN_MOVE_DISTANCE && !checkIsHorizontalDirection(moveDistanceX, moveDistanceY)){
-                        //上滑
-                        Log.i("fuck", "onFling: 上");
-                    }else if(moveDistanceY > MIN_MOVE_DISTANCE && !checkIsHorizontalDirection(moveDistanceX, moveDistanceY)){
-                        //下滑
-                        Log.i("fuck", "onFling: 下");
-                    }
-                    return true;
-                }
-
-
-                @Override
-                public boolean onDoubleTap(MotionEvent e) {
-                    Log.i("fuck", "onDoubleTapEvent: 双击");
-                    return true;
-                }
-            };
-
-    /**
-     *
-     * @param distanceX
-     * @param distanceY
-     * @return
-     * true is considered to be moving horizontally
-     * false is considered to be moving vertically
-     */
-    private boolean checkIsHorizontalDirection(float distanceX, float distanceY){
-        if (Math.abs(distanceX) >= Math.abs(distanceY)){
-            return true;
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (onGestureListener != null){
+            onGestureListener.onConfigurationChanged(DeviceUtils.deviceWidth(getContext()),
+                    DeviceUtils.deviceHeight(getContext()));
         }
-        return false;
     }
+
+    private VideoGestureListener onGestureListener = new VideoGestureListener(
+            DeviceUtils.deviceWidth(getContext()), DeviceUtils.deviceHeight(getContext()) ){
+
+        @Override
+        public void leftSlideUp(float distance, float percent) {
+            Log.i(TAG, "leftSlideUp: "+ DeviceUtils.adjustBrightness((Activity)getContext(), percent));
+        }
+
+        @Override
+        public void leftSlideDown(float distance, float percent) {
+            Log.i(TAG, "leftSlideDown: "+ DeviceUtils.adjustBrightness((Activity)getContext(), -percent));
+        }
+
+        @Override
+        public void rightSlideUp(float distance, float percent) {
+            Log.i(TAG, "rightSlideUp: "+DeviceUtils.adjustVolume(getContext(), 0.5f * percent));
+
+        }
+
+        @Override
+        public void rightSlideDown(float distance, float percent) {
+            Log.i(TAG, "rightSlideDown: "+ DeviceUtils.adjustVolume(getContext(), - 0.5f * percent));
+
+        }
+
+        //// TODO: 2017/9/8 左右划M3u8兼容问题 
+        @Override
+        public void slideLeft2Right(float distance, float percent) {
+            Log.i(TAG, "slideLeft2Right: ");
+            int seekDuration = (int) (percent / 0.1 * 5000);
+            int newPosition = mPlayer.getCurrentPosition() + seekDuration;
+            if (newPosition > mPlayer.getDuration())newPosition = mPlayer.getDuration();
+            mPlayer.seekTo(newPosition);
+        }
+
+        @Override
+        public void slideRight2Left(float distance, float percent) {
+            Log.i(TAG, "slideRight2Left: ");
+            int seekDuration = (int) (percent / 0.1 * 5000);
+            int newPosition = mPlayer.getCurrentPosition() - seekDuration;
+            if (newPosition < 0)newPosition = 0;
+            mPlayer.seekTo(newPosition);
+        }
+
+        @Override
+        public void doubleTap() {
+
+        }
+    };
+
 
     @Override
     public boolean onTrackballEvent(MotionEvent ev) {
@@ -352,12 +371,20 @@ public class SuperMediaController extends FrameLayout{
     }
 
     private final SeekBar.OnSeekBarChangeListener mSeekListener = new SeekBar.OnSeekBarChangeListener() {
+        long newPosition;
+
         @Override
         public void onStartTrackingTouch(SeekBar bar) {
             //when you drag the seekBar
 
             show(3600000);
             mDragging = true;
+
+            // By removing these pending progress messages we make sure
+            // that a) we won't update the progress while the user adjusts
+            // the seekbar and b) once the user is done dragging the thumb
+            // we will post one of these messages to the queue again and
+            // this ensures that there will be exactly one message queued up.
             mHandler.removeMessages(SHOW_PROGRESS);
             onSeekBarStartDrag();
         }
@@ -372,8 +399,10 @@ public class SuperMediaController extends FrameLayout{
             }
 
             long duration = mPlayer.getDuration();
-            long newPosition = (duration * progress) / 1000L;
-            mPlayer.seekTo( (int) newPosition);
+            newPosition = (duration * progress) / 1000L;
+            // 系统原来的实现是在progress改变的时候时刻都在进行videoPlayer的seek
+            // 这会导致seek m3u8切片文件的时候拖动seek时不准确，所以需要在拖动完成后才进行播放器的seekTo()
+            // mPlayer.seekTo((int) newPosition);
             onSeekBarProgressChanged(newPosition, duration);
         }
 
@@ -383,9 +412,13 @@ public class SuperMediaController extends FrameLayout{
             //when you stop drag the seekBar
 
             mDragging = false;
+            mPlayer.seekTo( (int) newPosition);
             setProgress();
             updatePausePlay();
             show(sDefaultTimeout);
+            // Ensure that progress is properly updated in the future,
+            // the call to show() does not guarantee this because it is a
+            // no-op if we are already showing.
             mHandler.sendEmptyMessage(SHOW_PROGRESS);
             onSeekBarStopDrag();
         }

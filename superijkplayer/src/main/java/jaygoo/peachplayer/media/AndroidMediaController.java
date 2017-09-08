@@ -17,27 +17,35 @@
 
 package jaygoo.peachplayer.media;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import java.util.ArrayList;
 
-public class AndroidMediaController extends SuperMediaController implements IMediaController {
+import jaygoo.peachplayer.WeakHandler;
+import jaygoo.peachplayer.utils.DeviceUtils;
+
+public class AndroidMediaController extends BaseMediaController implements IMediaController {
     private ActionBar mActionBar;
+    private Activity activity;
+    private boolean portrait;
+    private WeakHandler handler = new WeakHandler();
+
 
     public AndroidMediaController(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView(context);
     }
 
-//    public AndroidMediaController(Context context, boolean useFastForward) {
-//        super(context, useFastForward);
-//        initView(context);
-//    }
 
     public AndroidMediaController(Context context) {
         super(context);
@@ -45,7 +53,136 @@ public class AndroidMediaController extends SuperMediaController implements IMed
     }
 
     private void initView(Context context) {
+        activity = (Activity)context;
+        if (mFullScreenButton != null){
+            mFullScreenButton.setOnClickListener(mFullScreenListener);
+        }
+        portrait = DeviceUtils.getScreenOrientation(activity) == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     }
+
+    private OnClickListener mFullScreenListener = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            toggleFullScreen();
+        }
+    };
+
+    /**
+     * 监听全屏跟非全屏
+     * @param newConfig
+     */
+    @Override
+    public void onConfigurationChanged(final Configuration newConfig) {
+        portrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT;
+        doOnConfigurationChanged(portrait);
+    }
+
+
+    /**
+     * 用户主动点击大小屏的切换
+     * 设置播放视频的是否是全屏
+     */
+    public void toggleFullScreen() {
+        /***
+         * 就算只用户主动切换大小，也是去是activity转向来实现的
+         */
+        if (DeviceUtils.getScreenOrientation(activity) == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {// 转小屏
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        } else {// 转全屏
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+        updateFullScreenButton();
+    }
+
+//    /**
+//     * 监听手机重力感应的切换屏幕的方向
+//     */
+//    private OrientationEventListener orientationEventListener = new OrientationEventListener(activity) {
+//        @Override
+//        public void onOrientationChanged(int orientation) {
+//            if (orientation >= 0 && orientation <= 30 || orientation >= 330
+//                    || (orientation >= 150 && orientation <= 210)) {
+//                // 竖屏
+//                if (portrait) {
+//                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+//                    orientationEventListener.disable();
+//                }
+//            } else if ((orientation >= 90 && orientation <= 120)
+//                    || (orientation >= 240 && orientation <= 300)) {
+//                if (!portrait) {
+//                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+//                    orientationEventListener.disable();
+//                }
+//            }
+//        }
+//    };
+
+    /**
+     * 当竖横屏切换时处理视频窗口
+     * @param portrait
+     */
+    private void doOnConfigurationChanged(final boolean portrait) {
+
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    setFullScreen(!portrait);
+                    if (portrait) {
+                        int screenWidth = DeviceUtils.deviceWidth(activity);
+                        ViewGroup.LayoutParams layoutParams = getLayoutParams();
+                        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                        layoutParams.width = screenWidth;
+                        layoutParams.height = screenWidth * 9 / 16;
+                        setLayoutParams(layoutParams);
+                        requestLayout();
+                    } else {
+                        int heightPixels = activity.getResources().getDisplayMetrics().heightPixels;
+                        int widthPixels = activity.getResources().getDisplayMetrics().widthPixels;
+                        ViewGroup.LayoutParams layoutParams = getLayoutParams();
+                        layoutParams.height = heightPixels;
+                        layoutParams.width = widthPixels;
+                        setLayoutParams(layoutParams);
+                        hide();
+                    }
+                    updateFullScreenButton();
+                }
+            });
+//            if (orientationEventListener != null) orientationEventListener.enable();
+
+    }
+
+    /**
+     * 更新全屏按钮面板
+     */
+    protected void updateFullScreenButton() {
+
+    }
+
+
+    /**
+     * 主动使窗口横竖屏切换
+     * @param fullScreen
+     */
+    private void setFullScreen(boolean fullScreen) {
+        if (activity != null) {
+            WindowManager.LayoutParams attrs = activity.getWindow()
+                    .getAttributes();
+            if (fullScreen) {
+                attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+                activity.getWindow().setAttributes(attrs);
+                activity.getWindow().addFlags(
+                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            } else {
+                attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                activity.getWindow().setAttributes(attrs);
+                activity.getWindow().clearFlags(
+                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            }
+        }
+
+    }
+
 
     public void setSupportActionBar(@Nullable ActionBar actionBar) {
         mActionBar = actionBar;
@@ -61,6 +198,7 @@ public class AndroidMediaController extends SuperMediaController implements IMed
         super.show();
         if (mActionBar != null)
             mActionBar.show();
+
     }
 
     @Override
