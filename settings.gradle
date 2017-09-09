@@ -1,1 +1,1 @@
-include ':app', ':superijkplayer'
+include ':app', ':library'

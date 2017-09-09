@@ -27,8 +27,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-
 import java.util.Formatter;
 import java.util.Locale;
 
@@ -221,7 +219,7 @@ public class BaseMediaController extends FrameLayout{
         if (mPlayer != null && mPlayer.isPlaying() && isGestureDetectorEnable) {
             mGestureDetector.onTouchEvent(event);
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -258,10 +256,18 @@ public class BaseMediaController extends FrameLayout{
 
         }
 
-        //// TODO: 2017/9/8 左右划M3u8兼容问题 
         @Override
-        public void slideLeft2Right(float distance, float percent) {
-            Log.i(TAG, "slideLeft2Right: ");
+        public void slideDownLeft2Right(float distance, float percent) {
+
+        }
+
+        @Override
+        public void slideDownRight2Left(float distance, float percent) {
+
+        }
+
+        @Override
+        public void slideUpLeft2Right(float distance, float percent) {
             int seekDuration = (int) (percent / 0.1 * 5000);
             int newPosition = mPlayer.getCurrentPosition() + seekDuration;
             if (newPosition > mPlayer.getDuration())newPosition = mPlayer.getDuration();
@@ -269,8 +275,7 @@ public class BaseMediaController extends FrameLayout{
         }
 
         @Override
-        public void slideRight2Left(float distance, float percent) {
-            Log.i(TAG, "slideRight2Left: ");
+        public void slideUpRight2Left(float distance, float percent) {
             int seekDuration = (int) (percent / 0.1 * 5000);
             int newPosition = mPlayer.getCurrentPosition() - seekDuration;
             if (newPosition < 0)newPosition = 0;

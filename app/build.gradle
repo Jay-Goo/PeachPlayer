@@ -31,5 +31,5 @@ dependencies {
 //    compile 'tv.danmaku.ijk.media:ijkplayer-java:0.8.2'
 //    compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.2'
 
-    compile project(path: ':superijkplayer')
+    compile project(path: ':library')
 }

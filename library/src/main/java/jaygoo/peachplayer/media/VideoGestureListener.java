@@ -30,9 +30,13 @@ public abstract class VideoGestureListener extends GestureDetector.SimpleOnGestu
     //右侧下划
     public abstract void rightSlideDown(float distance, float percent);
     //从左向右划
-    public abstract void slideLeft2Right(float distance, float percent);
+    public abstract void slideDownLeft2Right(float distance, float percent);
     //从右向左划
-    public abstract void slideRight2Left(float distance, float percent);
+    public abstract void slideDownRight2Left(float distance, float percent);
+    //从左向右划
+    public abstract void slideUpLeft2Right(float distance, float percent);
+    //从右向左划
+    public abstract void slideUpRight2Left(float distance, float percent);
     //双击
     public abstract void doubleTap();
 
@@ -78,21 +82,39 @@ public abstract class VideoGestureListener extends GestureDetector.SimpleOnGestu
                     rightSlideUp(absMoveDistanceY, (float) absMoveDistanceY/screenHeight);
                 }
             }else if (getDegree(absMoveDistanceX, absMoveDistanceY) >= DEGREE_LIMIT){
+
                 if (moveDistanceX > 0){
-                    slideLeft2Right(absMoveDistanceX, (float) absMoveDistanceX/screenWith);
+                    slideDownLeft2Right(absMoveDistanceX, (float) absMoveDistanceX/screenWith);
                 }else {
-                    slideRight2Left(absMoveDistanceX, (float) absMoveDistanceX/screenWith);
+                    slideDownRight2Left(absMoveDistanceX, (float) absMoveDistanceX/screenWith);
                 }
-            }
-        }
+                return false;
+            }else  return false;
+
+        }else return false;
 
         return true;
     }
 //
-//    @Override
-//    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-//
-//    }
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        int beginX = (int)e1.getX();
+        int endX = (int)e2.getX();
+        int beginY = (int)e1.getY();
+        int endY = (int)e2.getY();
+        int moveDistanceX = endX - beginX;
+        int moveDistanceY = endY - beginY;
+        int absMoveDistanceX = Math.abs(moveDistanceX);
+        int absMoveDistanceY = Math.abs(moveDistanceY);
+        if (getDegree(absMoveDistanceX, absMoveDistanceY) >= DEGREE_LIMIT){
+            if (moveDistanceX > 0){
+                slideUpLeft2Right(absMoveDistanceX, (float) absMoveDistanceX/screenWith);
+            }else {
+                slideUpRight2Left(absMoveDistanceX, (float) absMoveDistanceX/screenWith);
+            }
+        }else return false;
+        return true;
+    }
 
     /**
      *
