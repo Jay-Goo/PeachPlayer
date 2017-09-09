@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
-import jaygoo.peachplayer.media.AndroidMediaController;
 import jaygoo.peachplayer.media.PeachVideoView;
 import jaygoo.peachplayer.media.ScreenChangeController;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
@@ -14,7 +13,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 public class MainActivity extends AppCompatActivity {
 
     private FrameLayout fullScreen;
-    private AndroidMediaController mMediaController;
+    private CustomMediaPlayerController mMediaController;
     private PeachVideoView mVideoView;
     private ScreenChangeController mScreenChangeController;
 
@@ -22,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mMediaController = (AndroidMediaController) findViewById(R.id.mediaController);
+
+        mMediaController = (CustomMediaPlayerController) findViewById(R.id.mediaController);
 
         // init player
         IjkMediaPlayer.loadLibrariesOnce(null);

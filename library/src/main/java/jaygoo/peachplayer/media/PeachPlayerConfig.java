@@ -23,8 +23,15 @@ import android.preference.PreferenceManager;
 
 import jaygoo.peachplayer.R;
 
-
-public class Settings {
+/**
+ * ================================================
+ * 作    者：JayGoo
+ * 版    本：
+ * 创建日期：2017/9/9
+ * 描    述: 播放器全局配置
+ * ================================================
+ */
+public class PeachPlayerConfig {
     private Context mAppContext;
     private SharedPreferences mSharedPreferences;
 
@@ -33,10 +40,83 @@ public class Settings {
     public static final int PV_PLAYER__IjkMediaPlayer = 2;
     public static final int PV_PLAYER__IjkExoMediaPlayer = 3;
 
-    public Settings(Context context) {
+    public PeachPlayerConfig(Context context) {
         mAppContext = context.getApplicationContext();
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mAppContext);
     }
+
+    public PeachPlayerConfig setEnableAutoScreenRotation(boolean enable){
+        String key = mAppContext.getString(R.string.pref_key_enable_auto_screen_rotation);
+        mSharedPreferences.edit().putBoolean(key, enable).apply();
+        return this;
+    }
+
+    public PeachPlayerConfig setEnableBackgroundPlay(boolean enable){
+        String key = mAppContext.getString(R.string.pref_key_enable_background_play);
+        mSharedPreferences.edit().putBoolean(key, enable).apply();
+        return this;
+    }
+
+    public PeachPlayerConfig setEnableUsingMediaCodec(boolean enable){
+        String key = mAppContext.getString(R.string.pref_key_using_media_codec);
+        mSharedPreferences.edit().putBoolean(key, enable).apply();
+        return this;
+    }
+
+    public PeachPlayerConfig setEnableUsingMediaCodecAutoRotate(boolean enable){
+        String key = mAppContext.getString(R.string.pref_key_using_media_codec_auto_rotate);
+        mSharedPreferences.edit().putBoolean(key, enable).apply();
+        return this;
+    }
+
+    public PeachPlayerConfig setEnableMediaCodecHandleResolutionChange(boolean enable){
+        String key = mAppContext.getString(R.string.pref_key_media_codec_handle_resolution_change);
+        mSharedPreferences.edit().putBoolean(key, enable).apply();
+        return this;
+    }
+
+    public PeachPlayerConfig setEnableUsingOpenSLES(boolean enable){
+        String key = mAppContext.getString(R.string.pref_key_using_opensl_es);
+        mSharedPreferences.edit().putBoolean(key, enable).apply();
+        return this;
+    }
+
+    public PeachPlayerConfig setEnableNoView(boolean enable){
+        String key = mAppContext.getString(R.string.pref_key_enable_no_view);
+        mSharedPreferences.edit().putBoolean(key, enable).apply();
+        return this;
+    }
+
+    public PeachPlayerConfig setEnableSurfaceView(boolean enable){
+        String key = mAppContext.getString(R.string.pref_key_enable_surface_view);
+        mSharedPreferences.edit().putBoolean(key, enable).apply();
+        return this;
+    }
+
+    public PeachPlayerConfig setEnableTextureView(boolean enable){
+        String key = mAppContext.getString(R.string.pref_key_enable_texture_view);
+        mSharedPreferences.edit().putBoolean(key, enable).apply();
+        return this;
+    }
+
+    public PeachPlayerConfig setEnableDetachedSurfaceTextureView(boolean enable){
+        String key = mAppContext.getString(R.string.pref_key_enable_detached_surface_texture);
+        mSharedPreferences.edit().putBoolean(key, enable).apply();
+        return this;
+    }
+
+    public PeachPlayerConfig setEnableMediaDataSource(boolean enable){
+        String key = mAppContext.getString(R.string.pref_key_using_mediadatasource);
+        mSharedPreferences.edit().putBoolean(key, enable).apply();
+        return this;
+    }
+
+    public PeachPlayerConfig setLastDirectory(String path) {
+        String key = mAppContext.getString(R.string.pref_key_last_directory);
+        mSharedPreferences.edit().putString(key, path).apply();
+        return this;
+    }
+
 
     public boolean getEnableBackgroundPlay() {
         String key = mAppContext.getString(R.string.pref_key_enable_background_play);
@@ -134,8 +214,12 @@ public class Settings {
         return mSharedPreferences.getString(key, "/");
     }
 
-    public void setLastDirectory(String path) {
-        String key = mAppContext.getString(R.string.pref_key_last_directory);
-        mSharedPreferences.edit().putString(key, path).apply();
+    public boolean getAutoScreenRotationEnable(){
+        String key = mAppContext.getString(R.string.pref_key_enable_auto_screen_rotation);
+        return mSharedPreferences.getBoolean(key, true);
     }
+
+
+
+
 }

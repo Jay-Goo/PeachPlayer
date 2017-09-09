@@ -2,7 +2,7 @@
 
           package="jaygoo.peachplayer"
 >
-
+    <uses-permission android:name="android.hardware.sensor.accelerometer"/>
     <application android:allowBackup="true"
                  android:label="@string/app_name"
                  android:supportsRtl="true"

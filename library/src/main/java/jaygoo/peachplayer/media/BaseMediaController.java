@@ -34,7 +34,7 @@ import jaygoo.peachplayer.R;
 import jaygoo.peachplayer.utils.DeviceUtils;
 
 
-public class BaseMediaController extends FrameLayout{
+class BaseMediaController extends FrameLayout{
     String TAG = "fuck";
     StringBuilder mFormatBuilder;
     Formatter mFormatter;
@@ -54,8 +54,7 @@ public class BaseMediaController extends FrameLayout{
     private static final float MIN_MOVE_DISTANCE = 40;//最小滑动距离
     private CharSequence mPlayDescription;
     private CharSequence mPauseDescription;
-    private GestureDetector mGestureDetector;
-    private boolean isGestureDetectorEnable = true;
+
     private int mMediaControllerLayoutId = R.layout.default_media_controller;
 
     public BaseMediaController(Context context, AttributeSet attrs) {
@@ -114,7 +113,7 @@ public class BaseMediaController extends FrameLayout{
         mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
         mPlaySpeedTv = (TextView) v.findViewById(R.id.controller_tv_speed);
         mPlaySpeedTv.setOnClickListener(mSetSpeedListener);
-        mGestureDetector = new GestureDetector(getContext(),onGestureListener);
+
     }
 
 
@@ -216,77 +215,11 @@ public class BaseMediaController extends FrameLayout{
             default:
                 break;
         }
-        if (mPlayer != null && mPlayer.isPlaying() && isGestureDetectorEnable) {
-            mGestureDetector.onTouchEvent(event);
-        }
-        return false;
+
+        return true;
     }
 
-    @Override
-    protected void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (onGestureListener != null){
-            onGestureListener.onConfigurationChanged(DeviceUtils.deviceWidth(getContext()),
-                    DeviceUtils.deviceHeight(getContext()));
-        }
-    }
 
-    private VideoGestureListener onGestureListener = new VideoGestureListener(
-            DeviceUtils.deviceWidth(getContext()), DeviceUtils.deviceHeight(getContext()) ){
-
-        @Override
-        public void leftSlideUp(float distance, float percent) {
-            Log.i(TAG, "leftSlideUp: "+ DeviceUtils.adjustBrightness((Activity)getContext(), percent));
-        }
-
-        @Override
-        public void leftSlideDown(float distance, float percent) {
-            Log.i(TAG, "leftSlideDown: "+ DeviceUtils.adjustBrightness((Activity)getContext(), -percent));
-        }
-
-        @Override
-        public void rightSlideUp(float distance, float percent) {
-            Log.i(TAG, "rightSlideUp: "+DeviceUtils.adjustVolume(getContext(), 0.5f * percent));
-
-        }
-
-        @Override
-        public void rightSlideDown(float distance, float percent) {
-            Log.i(TAG, "rightSlideDown: "+ DeviceUtils.adjustVolume(getContext(), - 0.5f * percent));
-
-        }
-
-        @Override
-        public void slideDownLeft2Right(float distance, float percent) {
-
-        }
-
-        @Override
-        public void slideDownRight2Left(float distance, float percent) {
-
-        }
-
-        @Override
-        public void slideUpLeft2Right(float distance, float percent) {
-            int seekDuration = (int) (percent / 0.1 * 5000);
-            int newPosition = mPlayer.getCurrentPosition() + seekDuration;
-            if (newPosition > mPlayer.getDuration())newPosition = mPlayer.getDuration();
-            mPlayer.seekTo(newPosition);
-        }
-
-        @Override
-        public void slideUpRight2Left(float distance, float percent) {
-            int seekDuration = (int) (percent / 0.1 * 5000);
-            int newPosition = mPlayer.getCurrentPosition() - seekDuration;
-            if (newPosition < 0)newPosition = 0;
-            mPlayer.seekTo(newPosition);
-        }
-
-        @Override
-        public void doubleTap() {
-
-        }
-    };
 
 
     @Override
@@ -430,7 +363,7 @@ public class BaseMediaController extends FrameLayout{
     };
 
     //========================= Override  Methods =====================//
-    // you can extend your UI methods in your superIjkPlayer
+    // you can extend your UI methods in your PeachPlayer
 
     /**
      * called when you click change speed option
@@ -462,23 +395,18 @@ public class BaseMediaController extends FrameLayout{
     protected void onSeekBarProgressChanged(long current, long duration) {
         if (mCurrentTime != null)
             mCurrentTime.setText(stringForTime(current , duration));
-        Log.i("fuck", "onSeekBarProgressChanged: ");
     }
 
     /**
      * when you start drag the seekBar
      */
-    protected void onSeekBarStartDrag() {
-        Log.i("fuck", "onSeekBarStartDrag: ");
-    }
+    protected void onSeekBarStartDrag() {}
 
     /**
      * when you stop drag the seekBar
      * it will call after {@link #onSeekBarProgressChanged(long current, long duration)}
      */
-    protected void onSeekBarStopDrag() {
-        Log.i("fuck", "onSeekBarStopDrag: ");
-    }
+    protected void onSeekBarStopDrag() {}
 
     /**
      * you can change your pause button UI state
@@ -567,13 +495,7 @@ public class BaseMediaController extends FrameLayout{
         super.setEnabled(enabled);
     }
 
-    /**
-     * is support GestureDetector, default is support
-     * @param gestureDetectorEnable
-     */
-    public void setGestureDetectorEnable(boolean gestureDetectorEnable) {
-        isGestureDetectorEnable = gestureDetectorEnable;
-    }
+
 
     public void setMediaControllerLayoutId(int layoutId){
         mMediaControllerLayoutId = layoutId;

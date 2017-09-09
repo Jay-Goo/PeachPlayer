@@ -108,5 +108,7 @@
 
     <!-- -->
     <string name="pref_key_last_directory"></string>
+    
+    <string name="pref_key_enable_auto_screen_rotation">pref.key_enable_auto_screen_rotation</string>
 
 </resources>

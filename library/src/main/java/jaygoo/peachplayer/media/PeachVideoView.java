@@ -116,7 +116,7 @@ public class PeachVideoView extends FrameLayout implements BaseMediaController.M
     // private RenderingWidget.OnChangedListener mSubtitlesChangedListener;
 
     private Context mAppContext;
-    private Settings mSettings;
+    PeachPlayerConfig mPeachPlayerConfig;
     private IRenderView mRenderView;
     private int mVideoSarNum;
     private int mVideoSarDen;
@@ -159,7 +159,7 @@ public class PeachVideoView extends FrameLayout implements BaseMediaController.M
 
     private void initVideoView(Context context) {
         mAppContext = context.getApplicationContext();
-        mSettings = new Settings(mAppContext);
+        mPeachPlayerConfig = new PeachPlayerConfig(mAppContext);
 
         initBackground();
         initRenders();
@@ -343,7 +343,7 @@ public class PeachVideoView extends FrameLayout implements BaseMediaController.M
             mCurrentBufferPercentage = 0;
             String scheme = mUri.getScheme();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                    mSettings.getUsingMediaDataSource() &&
+                    mPeachPlayerConfig.getUsingMediaDataSource() &&
                     (TextUtils.isEmpty(scheme) || scheme.equalsIgnoreCase("file"))) {
                 IMediaDataSource dataSource = new FileMediaDataSource(new File(mUri.toString()));
                 mMediaPlayer.setDataSource(dataSource);
@@ -956,11 +956,11 @@ public class PeachVideoView extends FrameLayout implements BaseMediaController.M
     private void initRenders() {
         mAllRenders.clear();
 
-        if (mSettings.getEnableSurfaceView())
+        if (mPeachPlayerConfig.getEnableSurfaceView())
             mAllRenders.add(RENDER_SURFACE_VIEW);
-        if (mSettings.getEnableTextureView() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+        if (mPeachPlayerConfig.getEnableTextureView() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
             mAllRenders.add(RENDER_TEXTURE_VIEW);
-        if (mSettings.getEnableNoView())
+        if (mPeachPlayerConfig.getEnableNoView())
             mAllRenders.add(RENDER_NONE);
 
         if (mAllRenders.isEmpty())
@@ -1008,20 +1008,20 @@ public class PeachVideoView extends FrameLayout implements BaseMediaController.M
         if (mRenderView != null)
             mRenderView.getView().invalidate();
         openVideo();
-        return mSettings.getPlayer();
+        return mPeachPlayerConfig.getPlayer();
     }
 
     @NonNull
     public static String getPlayerText(Context context, int player) {
         String text;
         switch (player) {
-            case Settings.PV_PLAYER__AndroidMediaPlayer:
+            case PeachPlayerConfig.PV_PLAYER__AndroidMediaPlayer:
                 text = context.getString(R.string.VideoView_player_AndroidMediaPlayer);
                 break;
-            case Settings.PV_PLAYER__IjkMediaPlayer:
+            case PeachPlayerConfig.PV_PLAYER__IjkMediaPlayer:
                 text = context.getString(R.string.VideoView_player_IjkMediaPlayer);
                 break;
-            case Settings.PV_PLAYER__IjkExoMediaPlayer:
+            case PeachPlayerConfig.PV_PLAYER__IjkExoMediaPlayer:
                 text = context.getString(R.string.VideoView_player_IjkExoMediaPlayer);
                 break;
             default:
@@ -1038,14 +1038,14 @@ public class PeachVideoView extends FrameLayout implements BaseMediaController.M
             ijkMediaPlayer = new IjkMediaPlayer();
             ijkMediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG);
 
-            if (mSettings.getUsingMediaCodec()) {
+            if (mPeachPlayerConfig.getUsingMediaCodec()) {
                 ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
-                if (mSettings.getUsingMediaCodecAutoRotate()) {
+                if (mPeachPlayerConfig.getUsingMediaCodecAutoRotate()) {
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
                 } else {
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 0);
                 }
-                if (mSettings.getMediaCodecHandleResolutionChange()) {
+                if (mPeachPlayerConfig.getMediaCodecHandleResolutionChange()) {
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 1);
                 } else {
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 0);
@@ -1054,13 +1054,13 @@ public class PeachVideoView extends FrameLayout implements BaseMediaController.M
                 ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 0);
             }
 
-            if (mSettings.getUsingOpenSLES()) {
+            if (mPeachPlayerConfig.getUsingOpenSLES()) {
                 ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", 1);
             } else {
                 ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", 0);
             }
 
-            String pixelFormat = mSettings.getPixelFormat();
+            String pixelFormat = mPeachPlayerConfig.getPixelFormat();
             if (TextUtils.isEmpty(pixelFormat)) {
                 ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", IjkMediaPlayer.SDL_FCC_RV32);
             } else {
@@ -1076,7 +1076,7 @@ public class PeachVideoView extends FrameLayout implements BaseMediaController.M
 
         mediaPlayer = ijkMediaPlayer;
 
-        if (mSettings.getEnableDetachedSurfaceTextureView()) {
+        if (mPeachPlayerConfig.getEnableDetachedSurfaceTextureView()) {
             mediaPlayer = new TextureMediaPlayer(mediaPlayer);
         }
 
@@ -1090,7 +1090,7 @@ public class PeachVideoView extends FrameLayout implements BaseMediaController.M
     private boolean mEnableBackgroundPlay = false;
 
     private void initBackground() {
-        mEnableBackgroundPlay = mSettings.getEnableBackgroundPlay();
+        mEnableBackgroundPlay = mPeachPlayerConfig.getEnableBackgroundPlay();
         if (mEnableBackgroundPlay) {
             MediaPlayerService.intentToStart(getContext());
             mMediaPlayer = MediaPlayerService.getMediaPlayer();

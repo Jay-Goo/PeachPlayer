@@ -29,14 +29,14 @@ public abstract class VideoGestureListener extends GestureDetector.SimpleOnGestu
     public abstract void rightSlideUp(float distance, float percent);
     //右侧下划
     public abstract void rightSlideDown(float distance, float percent);
-    //从左向右划
-    public abstract void slideDownLeft2Right(float distance, float percent);
-    //从右向左划
-    public abstract void slideDownRight2Left(float distance, float percent);
-    //从左向右划
-    public abstract void slideUpLeft2Right(float distance, float percent);
-    //从右向左划
-    public abstract void slideUpRight2Left(float distance, float percent);
+    //从左向右划手指按下
+    public abstract void left2RightSlideDown(float distance, float percent);
+    //从右向左划手指按下
+    public abstract void right2LeftSlideDown(float distance, float percent);
+    //从左向右划手指抬起
+    public abstract void left2RightSlideUp(float distance, float percent);
+    //从右向左划手指抬起
+    public abstract void right2LeftSlideUp(float distance, float percent);
     //双击
     public abstract void doubleTap();
 
@@ -84,9 +84,9 @@ public abstract class VideoGestureListener extends GestureDetector.SimpleOnGestu
             }else if (getDegree(absMoveDistanceX, absMoveDistanceY) >= DEGREE_LIMIT){
 
                 if (moveDistanceX > 0){
-                    slideDownLeft2Right(absMoveDistanceX, (float) absMoveDistanceX/screenWith);
+                    left2RightSlideDown(absMoveDistanceX, (float) absMoveDistanceX/screenWith);
                 }else {
-                    slideDownRight2Left(absMoveDistanceX, (float) absMoveDistanceX/screenWith);
+                    right2LeftSlideDown(absMoveDistanceX, (float) absMoveDistanceX/screenWith);
                 }
                 return false;
             }else  return false;
@@ -95,7 +95,7 @@ public abstract class VideoGestureListener extends GestureDetector.SimpleOnGestu
 
         return true;
     }
-//
+
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         int beginX = (int)e1.getX();
@@ -106,11 +106,13 @@ public abstract class VideoGestureListener extends GestureDetector.SimpleOnGestu
         int moveDistanceY = endY - beginY;
         int absMoveDistanceX = Math.abs(moveDistanceX);
         int absMoveDistanceY = Math.abs(moveDistanceY);
+
+        // fix media like m3u8 seek problem
         if (getDegree(absMoveDistanceX, absMoveDistanceY) >= DEGREE_LIMIT){
             if (moveDistanceX > 0){
-                slideUpLeft2Right(absMoveDistanceX, (float) absMoveDistanceX/screenWith);
+                left2RightSlideUp(absMoveDistanceX, (float) absMoveDistanceX/screenWith);
             }else {
-                slideUpRight2Left(absMoveDistanceX, (float) absMoveDistanceX/screenWith);
+                right2LeftSlideUp(absMoveDistanceX, (float) absMoveDistanceX/screenWith);
             }
         }else return false;
         return true;
