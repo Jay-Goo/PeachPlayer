@@ -130,6 +130,7 @@ public class PeachVideoView extends FrameLayout implements BaseMediaController.M
     private long mSeekEndTime = 0;
 
     private TextView subtitleDisplay;
+    private MediaLoaderView mMediaLoaderView;
 
     public PeachVideoView(Context context) {
         super(context);
@@ -504,9 +505,15 @@ public class PeachVideoView extends FrameLayout implements BaseMediaController.M
                             break;
                         case IMediaPlayer.MEDIA_INFO_BUFFERING_START:
                             Log.d(TAG, "MEDIA_INFO_BUFFERING_START:");
+                            if (mMediaLoaderView != null){
+                                mMediaLoaderView.startBuffering();
+                            }
                             break;
                         case IMediaPlayer.MEDIA_INFO_BUFFERING_END:
                             Log.d(TAG, "MEDIA_INFO_BUFFERING_END:");
+                            if (mMediaLoaderView != null){
+                                mMediaLoaderView.stopBuffering();
+                            }
                             break;
                         case IMediaPlayer.MEDIA_INFO_NETWORK_BANDWIDTH:
                             Log.d(TAG, "MEDIA_INFO_NETWORK_BANDWIDTH: " + arg2);
@@ -548,6 +555,10 @@ public class PeachVideoView extends FrameLayout implements BaseMediaController.M
                     mTargetState = STATE_ERROR;
                     if (mMediaController != null) {
                         mMediaController.hide();
+                    }
+
+                    if (mMediaLoaderView != null){
+                        mMediaLoaderView.loadError();
                     }
 
                     /* If an error handler has been supplied, use it and finish. */
@@ -1256,6 +1267,14 @@ public class PeachVideoView extends FrameLayout implements BaseMediaController.M
 
     public int getSelectedTrack(int trackType) {
         return MediaPlayerCompat.getSelectedTrack(mMediaPlayer, trackType);
+    }
+
+    public void setLoaderView(MediaLoaderView mediaLoaderView){
+        if (mediaLoaderView != null) {
+            mMediaLoaderView = mediaLoaderView;
+            mMediaLoaderView.init();
+            addView(mMediaLoaderView);
+        }
     }
 
 }

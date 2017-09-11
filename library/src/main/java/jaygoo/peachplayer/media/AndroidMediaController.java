@@ -170,7 +170,7 @@ public class AndroidMediaController extends BaseMediaController implements IMedi
      * 监听手机重力感应的切换屏幕的方向
      */
     private void setOrientationChangeListener(){
-        if (!mConfig.getAutoScreenRotationEnable())return;
+        if (mConfig == null || !mConfig.getAutoScreenRotationEnable())return;
         orientationEventListener = new OrientationEventListener(activity) {
             @Override
             public void onOrientationChanged(int orientation) {

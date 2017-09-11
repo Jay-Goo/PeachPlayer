@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="color_e7e7e7">#e7e7e7</color>
+    <color name="color_green">#2ED184</color>
     <color name="color_video_screen_background">#000000</color>
 </resources>

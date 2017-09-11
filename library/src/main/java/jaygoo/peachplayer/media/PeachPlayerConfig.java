@@ -75,6 +75,12 @@ public class PeachPlayerConfig {
         return this;
     }
 
+    /**
+     * 是否使用OpenSLES
+     * OpenSLES可以提高音频数据处理效率
+     * 但是不支持MIDI、不支持播放DRM和加密内容、不支持音频数据的编解码
+     * @return
+     */
     public PeachPlayerConfig setEnableUsingOpenSLES(boolean enable){
         String key = mAppContext.getString(R.string.pref_key_using_opensl_es);
         mSharedPreferences.edit().putBoolean(key, enable).apply();
@@ -161,9 +167,7 @@ public class PeachPlayerConfig {
     }
 
     /**
-     * 是否使用OpenSLES
-     * OpenSLES可以提高音频数据处理效率
-     * 但是不支持MIDI、不支持播放DRM和加密内容、不支持音频数据的编解码
+     * link{ setEnableUsingOpenSLES(boolean enable)}
      * @return
      */
     public boolean getUsingOpenSLES() {

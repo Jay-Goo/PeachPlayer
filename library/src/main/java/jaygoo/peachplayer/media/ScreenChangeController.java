@@ -1,5 +1,6 @@
 package jaygoo.peachplayer.media;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.support.v4.content.ContextCompat;
@@ -24,7 +25,7 @@ public class ScreenChangeController {
 
 
     private FrameLayout fullScreenLayout;
-    private ViewGroup videoScreenLayut;
+    private ViewGroup videoScreenLayout;
     private PeachVideoView videoView;
     private AndroidMediaController mediaController;
     private List<View> childViews = new ArrayList<>();
@@ -32,8 +33,9 @@ public class ScreenChangeController {
 
     public ScreenChangeController(ViewGroup videoScreen, FrameLayout customFullScreenLayout){
         if (videoScreen == null)throw new IllegalStateException("video screen is null");
-        videoScreenLayut = videoScreen;
+        videoScreenLayout = videoScreen;
         Context context = videoScreen.getContext();
+
         ViewGroup parent = (ViewGroup)videoScreen.getParent();
         if (parent != null){
             if (customFullScreenLayout == null) {
@@ -70,18 +72,18 @@ public class ScreenChangeController {
      */
     public void onConfigurationChanged(Configuration newConfig) {
 
-        if (mediaController != null && videoScreenLayut != null && videoView != null && fullScreenLayout != null) {
+        if (mediaController != null && videoScreenLayout != null && videoView != null && fullScreenLayout != null) {
             mediaController.onConfigurationChanged(newConfig);
             // 切换为小屏
             if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 fullScreenLayout.setVisibility(View.GONE);
                 fullScreenLayout.removeAllViews();
 
-                videoScreenLayut.removeAllViews();
-                videoScreenLayut.addView(videoView);
-                videoScreenLayut.addView(mediaController);
+                videoScreenLayout.removeAllViews();
+                videoScreenLayout.addView(videoView);
+                videoScreenLayout.addView(mediaController);
                 for (int i = 0; i < childViews.size(); i++) {
-                    videoScreenLayut.addView(childViews.get(i));
+                    videoScreenLayout.addView(childViews.get(i));
                 }
                 int mShowFlags =
                         View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -97,7 +99,7 @@ public class ScreenChangeController {
                 fullScreenLayout.addView(videoView);
                 fullScreenLayout.addView(mediaController);
                 for (int i = 0; i < childViews.size(); i++) {
-                    videoScreenLayut.addView(childViews.get(i));
+                    videoScreenLayout.addView(childViews.get(i));
                 }
                 fullScreenLayout.setVisibility(View.VISIBLE);
                 int mHideFlags =
@@ -108,6 +110,7 @@ public class ScreenChangeController {
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
                 fullScreenLayout.setSystemUiVisibility(mHideFlags);
+
             }
 
         }

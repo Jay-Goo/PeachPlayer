@@ -2,20 +2,29 @@ package jaygoo.peachplayerdemo;
 
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
+import jaygoo.peachplayer.media.MediaLoaderView;
 import jaygoo.peachplayer.media.PeachVideoView;
 import jaygoo.peachplayer.media.ScreenChangeController;
+import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class MainActivity extends AppCompatActivity {
 
+    String TAG = "fuck";
     private FrameLayout fullScreen;
     private CustomMediaPlayerController mMediaController;
     private PeachVideoView mVideoView;
     private ScreenChangeController mScreenChangeController;
+    MediaLoaderController mediaLoaderController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 //        mVideoView.setHudView(mHudView);
 //        fullScreen = (FrameLayout) findViewById(R.id.full_screen);
         mScreenChangeController = new ScreenChangeController((FrameLayout)findViewById(R.id.video_screen),null);
+
+        mVideoView.setLoaderView((MediaLoaderView)LayoutInflater.from(getBaseContext()).inflate(R.layout.layout_media_loader, null));
     }
 
     @Override
@@ -51,5 +62,6 @@ public class MainActivity extends AppCompatActivity {
         if (mScreenChangeController != null){
             mScreenChangeController.onConfigurationChanged(newConfig);
         }
+
     }
 }
