@@ -429,6 +429,10 @@ public class PeachVideoView extends FrameLayout implements BaseMediaController.M
             // Get the capabilities of the player for this stream
             // REMOVED: Metadata
 
+            if (mMediaLoaderView != null){
+                mMediaLoaderView.prepared();
+            }
+
             if (mOnPreparedListener != null) {
                 mOnPreparedListener.onPrepared(mMediaPlayer);
             }
@@ -506,7 +510,7 @@ public class PeachVideoView extends FrameLayout implements BaseMediaController.M
                         case IMediaPlayer.MEDIA_INFO_BUFFERING_START:
                             Log.d(TAG, "MEDIA_INFO_BUFFERING_START:");
                             if (mMediaLoaderView != null){
-                                mMediaLoaderView.startBuffering();
+                                mMediaLoaderView.startBuffering(getRealTcpSpeed(), getFormatedTcpSpeed());
                             }
                             break;
                         case IMediaPlayer.MEDIA_INFO_BUFFERING_END:
@@ -1277,4 +1281,14 @@ public class PeachVideoView extends FrameLayout implements BaseMediaController.M
         }
     }
 
+    public long getRealTcpSpeed(){
+        if (mMediaPlayer instanceof IjkMediaPlayer){
+            return ((IjkMediaPlayer)mMediaPlayer).getTcpSpeed();
+        }
+        return 0;
+    }
+
+    public String getFormatedTcpSpeed(){
+        return String.format(Locale.US, "%s", InfoHudViewHolder.formatedSpeed(getRealTcpSpeed(), 1000));
+    }
 }

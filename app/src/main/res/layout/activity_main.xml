@@ -8,39 +8,33 @@
     android:orientation="vertical"
     android:id="@+id/video_screen_father"
     tools:context="jaygoo.peachplayerdemo.MainActivity">
+    <FrameLayout
+        android:id="@+id/video_screen"
+        android:layout_width="match_parent"
+        android:background="@color/color_video_screen_background"
+        android:layout_height="200dp">
 
-      <FrameLayout
-          android:id="@+id/video_screen"
-          android:layout_width="match_parent"
-          android:background="@color/color_video_screen_background"
-          android:layout_height="200dp">
+        <jaygoo.peachplayer.media.PeachVideoView
+            android:id="@+id/ijkVideoView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+        <jaygoo.peachplayerdemo.CustomMediaPlayerController
+            android:id="@+id/mediaController"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:controllerLayoutId="@layout/custom_media_controller"
+            android:layout_gravity="bottom"/>
+        <!--<TableLayout-->
+        <!--android:id="@+id/hud_view"-->
+        <!--android:visibility="visible"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="left|center_vertical"-->
+        <!--android:background="@color/color_e7e7e7"-->
+        <!--android:padding="8dp" />-->
 
-          <jaygoo.peachplayer.media.PeachVideoView
-              android:id="@+id/ijkVideoView"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              />
-          <jaygoo.peachplayerdemo.CustomMediaPlayerController
-              android:id="@+id/mediaController"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_gravity="bottom"/>
-          <!--<TableLayout-->
-              <!--android:id="@+id/hud_view"-->
-              <!--android:visibility="visible"-->
-              <!--android:layout_width="wrap_content"-->
-              <!--android:layout_height="wrap_content"-->
-              <!--android:layout_gravity="left|center_vertical"-->
-              <!--android:background="@color/color_e7e7e7"-->
-              <!--android:padding="8dp" />-->
-      </FrameLayout>
-
-    <!--<FrameLayout-->
-        <!--android:id="@+id/full_screen"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="#000"-->
-        <!--android:gravity="center"-->
-        <!--android:visibility="gone" />-->
+    </FrameLayout>
+    <include layout="@layout/widget_toolbar"/>
 
 </FrameLayout>

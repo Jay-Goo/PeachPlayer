@@ -36,24 +36,22 @@ import jaygoo.peachplayer.utils.DeviceUtils;
 
 class BaseMediaController extends FrameLayout{
     String TAG = "fuck";
-    StringBuilder mFormatBuilder;
-    Formatter mFormatter;
-    View mPauseButton;
-    View mFullScreenButton;
-    TextView mPlaySpeedTv;
-    MediaPlayerControl mPlayer;
-    View mRoot;
-    SeekBar mProgress;
-    TextView mCurrentTime;
+    protected StringBuilder mFormatBuilder;
+    protected Formatter mFormatter;
+    protected View mPauseButton;
+    protected View mFullScreenButton;
+    protected TextView mPlaySpeedTv;
+    protected  MediaPlayerControl mPlayer;
+    protected View mRoot;
+    protected SeekBar mProgress;
+    protected TextView mCurrentTime;
 
     private boolean mShowing;
     private boolean mDragging;
-    private static final int sDefaultTimeout = 3000;
+    private static final int sDefaultTimeout = 5000;
     private static final int FADE_OUT = 1;
     private static final int SHOW_PROGRESS = 2;
     private static final float MIN_MOVE_DISTANCE = 40;//最小滑动距离
-    private CharSequence mPlayDescription;
-    private CharSequence mPauseDescription;
 
     private int mMediaControllerLayoutId = R.layout.default_media_controller;
 
@@ -89,8 +87,6 @@ class BaseMediaController extends FrameLayout{
     }
 
     private void initControllerView(View v) {
-        mPlayDescription = "播放";
-        mPauseDescription = "暂停";
         mPauseButton =  v.findViewById(R.id.controller_iv_pause);
         if (mPauseButton != null) {
             mPauseButton.requestFocus();
@@ -112,7 +108,9 @@ class BaseMediaController extends FrameLayout{
         mFormatBuilder = new StringBuilder();
         mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
         mPlaySpeedTv = (TextView) v.findViewById(R.id.controller_tv_speed);
-        mPlaySpeedTv.setOnClickListener(mSetSpeedListener);
+        if (mPlaySpeedTv != null) {
+            mPlaySpeedTv.setOnClickListener(mSetSpeedListener);
+        }
 
     }
 
@@ -151,7 +149,9 @@ class BaseMediaController extends FrameLayout{
                     break;
                 case SHOW_PROGRESS:
                     pos = setProgress();
-                    if (!mDragging && mShowing && mPlayer.isPlaying()) {
+                    //2017-09-12
+                    // remove && mPlayer.isPlaying()
+                    if (!mDragging && mShowing && mPlayer != null) {
                         msg = obtainMessage(SHOW_PROGRESS);
                         sendMessageDelayed(msg, 1000 - (pos % 1000));
                     }
@@ -202,24 +202,9 @@ class BaseMediaController extends FrameLayout{
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                show(0); // show until hide is called
-                break;
-            case MotionEvent.ACTION_UP:
-                show(sDefaultTimeout); // start timeout
-                break;
-            case MotionEvent.ACTION_CANCEL:
-                hide();
-                break;
-            default:
-                break;
-        }
-
+        // cost the touch event to make the video GestureListener work
         return true;
     }
-
-
 
 
     @Override
@@ -413,16 +398,16 @@ class BaseMediaController extends FrameLayout{
      * @param mPlayer the MediaPlayerControl
      */
     protected void onClickOptionPause(MediaPlayerControl mPlayer) {
-        if (mPauseButton == null)
+        if (mPauseButton == null || mPlayer == null)
             return;
         if (mPauseButton instanceof ImageView){
             ImageView pauseButton = (ImageView) mPauseButton;
             if (mPlayer.isPlaying()) {
                 pauseButton.setImageResource(R.drawable.video_pause);
-                mPauseButton.setContentDescription(mPauseDescription);
+//                mPauseButton.setContentDescription(mPauseDescription);
             } else {
                 pauseButton.setImageResource(R.drawable.video_start);
-                mPauseButton.setContentDescription(mPlayDescription);
+//                mPauseButton.setContentDescription(mPlayDescription);
             }
         }
 
@@ -495,11 +480,6 @@ class BaseMediaController extends FrameLayout{
         super.setEnabled(enabled);
     }
 
-
-
-    public void setMediaControllerLayoutId(int layoutId){
-        mMediaControllerLayoutId = layoutId;
-    }
 
     public interface MediaPlayerControl {
         void    start();

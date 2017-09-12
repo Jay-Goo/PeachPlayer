@@ -1,7 +1,5 @@
 package jaygoo.peachplayer.media;
 
-import android.graphics.Rect;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
@@ -39,6 +37,11 @@ public abstract class VideoGestureListener extends GestureDetector.SimpleOnGestu
     public abstract void right2LeftSlideUp(float distance, float percent);
     //双击
     public abstract void doubleTap();
+    //单击
+    public abstract void singleClick(MotionEvent e);
+    //长按
+    public abstract void longClick();
+
 
     public VideoGestureListener(int screenWith, int screenHeight){
         onConfigurationChanged(screenWith, screenHeight);
@@ -89,9 +92,9 @@ public abstract class VideoGestureListener extends GestureDetector.SimpleOnGestu
                     right2LeftSlideDown(absMoveDistanceX, (float) absMoveDistanceX/screenWith);
                 }
                 return false;
-            }else  return false;
+            }
 
-        }else return false;
+        }
 
         return true;
     }
@@ -114,7 +117,7 @@ public abstract class VideoGestureListener extends GestureDetector.SimpleOnGestu
             }else {
                 right2LeftSlideUp(absMoveDistanceX, (float) absMoveDistanceX/screenWith);
             }
-        }else return false;
+        }
         return true;
     }
 
@@ -139,4 +142,16 @@ public abstract class VideoGestureListener extends GestureDetector.SimpleOnGestu
         doubleTap();
         return true;
     }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+        longClick();
+    }
+
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent e) {
+        singleClick(e);
+        return true;
+    }
+
 }

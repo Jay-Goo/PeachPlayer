@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -32,7 +33,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mMediaController = (CustomMediaPlayerController) findViewById(R.id.mediaController);
-
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar.setLogo(R.drawable.ic_video_back);
+        toolbar.setTitle("水蜜桃播放器");
+        setSupportActionBar(toolbar);
+        mMediaController.setSupportActionBar(getSupportActionBar());
         // init player
         IjkMediaPlayer.loadLibrariesOnce(null);
         IjkMediaPlayer.native_profileBegin("libijkplayer.so");
@@ -54,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (mVideoView != null){
+            mVideoView.resume();
+        }
+        if (mMediaController != null){
+            mMediaController.show();
+        }
     }
 
     @Override
@@ -63,5 +74,22 @@ public class MainActivity extends AppCompatActivity {
             mScreenChangeController.onConfigurationChanged(newConfig);
         }
 
+    }
+
+    @Override
+    protected void onStop() {
+        if (mVideoView != null){
+            mVideoView.pause();
+        }
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mVideoView != null){
+            mVideoView.stopPlayback();
+            mVideoView.release(true);
+        }
     }
 }

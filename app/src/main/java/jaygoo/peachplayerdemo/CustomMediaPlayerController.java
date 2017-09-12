@@ -3,6 +3,7 @@ package jaygoo.peachplayerdemo;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.widget.ImageView;
 
 import jaygoo.peachplayer.media.AndroidMediaController;
 
@@ -26,15 +27,27 @@ public class CustomMediaPlayerController extends AndroidMediaController {
 
     @Override
     protected float onGestureLeftSlideUp(float distance, float percent) {
-        Log.i("fuck", "onGestureLeftSlideUp: "+super.onGestureLeftSlideUp(distance, percent));
+        super.onGestureLeftSlideUp(distance, percent);
         return 0;
     }
 
     @Override
     protected float onGestureLeftSlideDown(float distance, float percent) {
-
-        Log.i("fuck", "onGestureLeftSlideDown: "+super.onGestureLeftSlideDown(distance, percent));
+        super.onGestureLeftSlideDown(distance, percent);
         return 0;
     }
 
+    @Override
+    protected void onClickOptionPause(MediaPlayerControl mPlayer) {
+        if (mPauseButton == null || mPlayer == null)
+            return;
+        if (mPauseButton instanceof ImageView){
+            ImageView pauseButton = (ImageView) mPauseButton;
+            if (mPlayer.isPlaying()) {
+                pauseButton.setImageResource(R.drawable.ic_video_pause);
+            } else {
+                pauseButton.setImageResource(R.drawable.ic_video_play);
+            }
+        }
+    }
 }

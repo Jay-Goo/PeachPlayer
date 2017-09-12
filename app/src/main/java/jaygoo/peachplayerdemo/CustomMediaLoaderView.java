@@ -2,6 +2,8 @@ package jaygoo.peachplayerdemo;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 
@@ -19,6 +21,7 @@ import jaygoo.peachplayer.media.MediaLoaderView;
 public class CustomMediaLoaderView extends MediaLoaderView {
 
     private LottieAnimationView loadingAnimationView;
+    private TextView hintTextView;
 
     public CustomMediaLoaderView(Context context) {
         super(context);
@@ -31,14 +34,22 @@ public class CustomMediaLoaderView extends MediaLoaderView {
     @Override
     public void init() {
         loadingAnimationView = (LottieAnimationView)findViewById(R.id.loadingAnimationView);
+        hintTextView = (TextView)findViewById(R.id.hintTextView);
         setVisibility(GONE);
     }
 
     @Override
-    public void startBuffering() {
+    public void prepared() {
+        hintTextView.setText("");
+    }
+
+    @Override
+    public void startBuffering(long realSpeed, String formatedSpeed) {
         setVisibility(VISIBLE);
+        hintTextView.setText(formatedSpeed);
         loadingAnimationView.playAnimation();
     }
+
 
     @Override
     public void stopBuffering() {

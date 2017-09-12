@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
@@ -34,6 +35,7 @@ public class MediaPlayerService extends Service {
     }
 
     public static void intentToStart(Context context) {
+        Log.i("fuck", "intentToStart: ");
         context.startService(newIntent(context));
     }
 

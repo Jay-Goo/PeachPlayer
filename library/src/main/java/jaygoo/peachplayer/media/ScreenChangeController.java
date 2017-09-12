@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +26,11 @@ import jaygoo.peachplayer.R;
  */
 public class ScreenChangeController {
 
-
     private FrameLayout fullScreenLayout;
     private ViewGroup videoScreenLayout;
     private PeachVideoView videoView;
     private AndroidMediaController mediaController;
     private List<View> childViews = new ArrayList<>();
-
 
     public ScreenChangeController(ViewGroup videoScreen, FrameLayout customFullScreenLayout){
         if (videoScreen == null)throw new IllegalStateException("video screen is null");
@@ -50,6 +51,19 @@ public class ScreenChangeController {
             }
             fullScreenLayout.setVisibility(View.GONE);
             parent.addView(fullScreenLayout);
+
+            //将toolbar重新放置到fullScreenLayout顶部
+            Toolbar toolbar = null;
+            for (int i = 0; i < parent.getChildCount(); i++) {
+                if (parent.getChildAt(i) instanceof Toolbar){
+                    toolbar = (Toolbar) parent.getChildAt(i);
+                    parent.removeView(toolbar);
+                    break;
+                }
+            }
+            if (toolbar != null){
+                parent.addView(toolbar);
+            }
         }
         for (int i = 0; i < videoScreen.getChildCount(); i++){
             if (videoScreen.getChildAt(i) instanceof AndroidMediaController){
@@ -63,14 +77,16 @@ public class ScreenChangeController {
     }
 
     /**
-     * player full screen, small screen switch
+     * player full screen, portrait screen switch
      * <p>
      *     call it in your activity 、fragment 's onConfigurationChanged
      * </p>
      *
      * @param newConfig
+     * @return true is full screen , false is portrait screen.
      */
-    public void onConfigurationChanged(Configuration newConfig) {
+
+    public boolean onConfigurationChanged(Configuration newConfig) {
 
         if (mediaController != null && videoScreenLayout != null && videoView != null && fullScreenLayout != null) {
             mediaController.onConfigurationChanged(newConfig);
@@ -90,11 +106,12 @@ public class ScreenChangeController {
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                                 | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
                 fullScreenLayout.setSystemUiVisibility(mShowFlags);
+                return false;
             } else {
                 //切换为全屏
                 ViewGroup viewGroup = (ViewGroup) mediaController.getParent();
                 if (viewGroup == null)
-                    return;
+                    return false;
                 viewGroup.removeAllViews();
                 fullScreenLayout.addView(videoView);
                 fullScreenLayout.addView(mediaController);
@@ -110,10 +127,10 @@ public class ScreenChangeController {
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
                 fullScreenLayout.setSystemUiVisibility(mHideFlags);
-
+                return true;
             }
-
         }
+        return false;
     }
 
 }

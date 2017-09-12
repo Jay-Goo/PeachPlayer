@@ -62,7 +62,7 @@ public class InfoHudViewHolder {
         }
     }
 
-    private static String formatedSpeed(long bytes,long elapsed_milli) {
+    public static String formatedSpeed(long bytes,long elapsed_milli) {
         if (elapsed_milli <= 0) {
             return "0 B/s";
         }

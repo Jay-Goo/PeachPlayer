@@ -66,8 +66,9 @@ public class AndroidMediaController extends BaseMediaController implements IMedi
         }
         portrait = DeviceUtils.getScreenOrientation(activity) == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         mGestureDetector = new GestureDetector(getContext(),onGestureListener);
-        setOrientationChangeListener();
         mConfig = new PeachPlayerConfig(context);
+        setOrientationChangeListener();
+
     }
 
     private OnClickListener mFullScreenListener = new OnClickListener() {
@@ -125,7 +126,18 @@ public class AndroidMediaController extends BaseMediaController implements IMedi
         public void doubleTap() {
             onGestureDoubleTap();
         }
+
+        @Override
+        public void singleClick(MotionEvent e) {
+            onGestureSingleClick(e);
+        }
+
+        @Override
+        public void longClick() {
+            onGestureLongClick();
+        }
     };
+
 
     /**
      * 监听全屏跟非全屏
@@ -180,17 +192,17 @@ public class AndroidMediaController extends BaseMediaController implements IMedi
                     // 竖屏
                     if (portrait) {
                         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-                        orientationEventListener.disable();
                     }
                 } else if ((orientation >= 90 && orientation <= 120)
                         || (orientation >= 240 && orientation <= 300)) {
                     if (!portrait) {
                         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-                        orientationEventListener.disable();
                     }
                 }
             }
         };
+
+        orientationEventListener.enable();
     }
 
 
@@ -212,6 +224,8 @@ public class AndroidMediaController extends BaseMediaController implements IMedi
                     layoutParams.height = screenWidth * 9 / 16;
                     setLayoutParams(layoutParams);
                     requestLayout();
+                    updatePortraitScreenButton();
+
                 } else {
                     int heightPixels = activity.getResources().getDisplayMetrics().heightPixels;
                     int widthPixels = activity.getResources().getDisplayMetrics().widthPixels;
@@ -219,11 +233,10 @@ public class AndroidMediaController extends BaseMediaController implements IMedi
                     layoutParams.height = heightPixels;
                     layoutParams.width = widthPixels;
                     setLayoutParams(layoutParams);
-                    hide();
-                }
-                updateFullScreenButton();
-                if (orientationEventListener != null) orientationEventListener.enable();
+                    updateFullScreenButton();
 
+                }
+                show();
             }
         });
 
@@ -255,6 +268,7 @@ public class AndroidMediaController extends BaseMediaController implements IMedi
 
 
     public void setSupportActionBar(@Nullable ActionBar actionBar) {
+        if (actionBar == null)return;
         mActionBar = actionBar;
         if (isShowing()) {
             actionBar.show();
@@ -292,6 +306,11 @@ public class AndroidMediaController extends BaseMediaController implements IMedi
      * 更新全屏按钮面板
      */
     protected void updateFullScreenButton() {}
+
+    /**
+     * 更新竖屏按钮面板
+     */
+    protected void updatePortraitScreenButton() {}
 
     /************************  手势操作  *************************/
 
@@ -343,10 +362,16 @@ public class AndroidMediaController extends BaseMediaController implements IMedi
     }
 
     //从左向右划
-    protected void onGestureLeft2RightSlideDown(float distance, float percent){}
+    protected void onGestureLeft2RightSlideDown(float distance, float percent){
+        //always show when slide down
+        show(0);
+    }
 
     //从右向左划
-    protected void onGestureRight2LeftSlideDown(float distance, float percent){}
+    protected void onGestureRight2LeftSlideDown(float distance, float percent){
+        //always show when slide down
+        show(0);
+    }
 
     /**
      * 从左向右划
@@ -378,8 +403,29 @@ public class AndroidMediaController extends BaseMediaController implements IMedi
         return 1.0f * newPosition / mPlayer.getDuration();
     }
 
-    //双击
+    /**
+     * 双击
+     */
     protected void onGestureDoubleTap(){}
+
+    /**
+     * 长按
+     */
+    private void onGestureLongClick() {
+    }
+
+    /**
+     * 单击
+     * @param e
+     */
+    private void onGestureSingleClick(MotionEvent e) {
+        Log.i(TAG, "onGestureSingleClick: ");
+        if (isShowing()){
+            hide();
+        }else {
+            show();
+        }
+    }
 
     /************************  手势操作  *************************/
 

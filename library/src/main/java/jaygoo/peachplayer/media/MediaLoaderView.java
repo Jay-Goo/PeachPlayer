@@ -3,6 +3,7 @@ package jaygoo.peachplayer.media;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 /**
@@ -25,8 +26,11 @@ public abstract class MediaLoaderView extends RelativeLayout{
     //初始化
     public abstract void init();
 
+    //准备完毕
+    public abstract void prepared();
+
     //开始缓冲
-    public abstract void startBuffering();
+    public abstract void startBuffering(long realSpeed, String formatedSpeed);
 
     //结束缓存
     public abstract void stopBuffering();
